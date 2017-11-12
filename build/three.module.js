@@ -22145,7 +22145,7 @@ function WebGLRenderer( parameters ) {
 		if ( isAnimating ) return;
 
 		var device = vr.getDevice();
-		
+
 		if ( device && device.isPresenting ) {
 
 			device.requestAnimationFrame( loop );
@@ -22165,7 +22165,7 @@ function WebGLRenderer( parameters ) {
 		if ( onAnimationFrame !== null ) onAnimationFrame( time );
 
 		var device = vr.getDevice();
-		
+
 		if ( device && device.isPresenting ) {
 
 			device.requestAnimationFrame( loop );
@@ -35919,7 +35919,7 @@ function EllipseCurve( aX, aY, xRadius, yRadius, aStartAngle, aEndAngle, aClockw
 	this.xRadius = xRadius || 1;
 	this.yRadius = yRadius || 1;
 
-	this.aStartAngle = aStartAngle || 0;
+	this.aStartAngle = aStartAngle || 0;
 	this.aEndAngle = aEndAngle || 2 * Math.PI;
 
 	this.aClockwise = aClockwise || false;
