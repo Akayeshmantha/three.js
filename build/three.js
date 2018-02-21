@@ -19876,6 +19876,7 @@
 
 		var device = null;
 		var frameData = null;
+		var layers = null;
 
 		var poseTarget = null;
 
@@ -19998,8 +19999,9 @@
 
 			}
 
-			poseObject.position.applyMatrix4( standingMatrix );
-			poseObject.updateMatrixWorld();
+			poseObject.matrixWorld.multiply( standingMatrix );
+			standingMatrixInverse.getInverse( standingMatrix );
+			camera.matrixWorldInverse.multiply( standingMatrixInverse );
 
 			if ( device.isPresenting === false ) return camera;
 
@@ -20050,7 +20052,11 @@
 
 			//
 
-			var layers = device.getLayers();
+			if ( !layers ) {
+
+				layers = device.getLayers();
+
+			}
 
 			if ( layers.length ) {
 
@@ -40566,7 +40572,7 @@
 
 					var pending = this.repetitions - loopCount;
 
-					if ( pending < 0 ) {
+					if ( pending <= 0 ) {
 
 						// have to stop (switch state, clamp time, fire event)
 
@@ -40584,7 +40590,7 @@
 
 						// keep running
 
-						if ( pending === 0 ) {
+						if ( pending === 1 ) {
 
 							// entering the last round
 
@@ -41895,9 +41901,9 @@
 
 		},
 
-		intersectObject: function ( object, recursive ) {
+		intersectObject: function ( object, recursive, optionalTarget ) {
 
-			var intersects = [];
+			var intersects = optionalTarget || [];
 
 			intersectObject( object, this, intersects, recursive );
 
@@ -41907,9 +41913,9 @@
 
 		},
 
-		intersectObjects: function ( objects, recursive ) {
+		intersectObjects: function ( objects, recursive, optionalTarget ) {
 
-			var intersects = [];
+			var intersects = optionalTarget || [];
 
 			if ( Array.isArray( objects ) === false ) {
 

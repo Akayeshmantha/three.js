@@ -19870,6 +19870,7 @@ function WebVRManager( renderer ) {
 
 	var device = null;
 	var frameData = null;
+	var layers = null;
 
 	var poseTarget = null;
 
@@ -19992,8 +19993,9 @@ function WebVRManager( renderer ) {
 
 		}
 
-		poseObject.position.applyMatrix4( standingMatrix );
-		poseObject.updateMatrixWorld();
+		poseObject.matrixWorld.multiply( standingMatrix );
+		standingMatrixInverse.getInverse( standingMatrix );
+		camera.matrixWorldInverse.multiply( standingMatrixInverse );
 
 		if ( device.isPresenting === false ) return camera;
 
@@ -20044,7 +20046,11 @@ function WebVRManager( renderer ) {
 
 		//
 
-		var layers = device.getLayers();
+		if ( !layers ) {
+
+			layers = device.getLayers();
+
+		}
 
 		if ( layers.length ) {
 
@@ -40560,7 +40566,7 @@ Object.assign( AnimationAction.prototype, {
 
 				var pending = this.repetitions - loopCount;
 
-				if ( pending < 0 ) {
+				if ( pending <= 0 ) {
 
 					// have to stop (switch state, clamp time, fire event)
 
@@ -40578,7 +40584,7 @@ Object.assign( AnimationAction.prototype, {
 
 					// keep running
 
-					if ( pending === 0 ) {
+					if ( pending === 1 ) {
 
 						// entering the last round
 
@@ -41889,9 +41895,9 @@ Object.assign( Raycaster.prototype, {
 
 	},
 
-	intersectObject: function ( object, recursive ) {
+	intersectObject: function ( object, recursive, optionalTarget ) {
 
-		var intersects = [];
+		var intersects = optionalTarget || [];
 
 		intersectObject( object, this, intersects, recursive );
 
@@ -41901,9 +41907,9 @@ Object.assign( Raycaster.prototype, {
 
 	},
 
-	intersectObjects: function ( objects, recursive ) {
+	intersectObjects: function ( objects, recursive, optionalTarget ) {
 
-		var intersects = [];
+		var intersects = optionalTarget || [];
 
 		if ( Array.isArray( objects ) === false ) {
 
