@@ -13,6 +13,7 @@ function WebVRManager( renderer ) {
 
 	var device = null;
 	var frameData = null;
+	var layers = null;
 
 	var poseTarget = null;
 
@@ -187,7 +188,11 @@ function WebVRManager( renderer ) {
 
 		//
 
-		var layers = device.getLayers();
+		if ( !layers ) {
+
+			layers = device.getLayers();
+
+		}
 
 		if ( layers.length ) {
 
