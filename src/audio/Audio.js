@@ -74,7 +74,7 @@ Audio.prototype = Object.assign( Object.create( Object3D.prototype ), {
 
 	},
 
-	play: function () {
+	play: function (sourceCreatedCallback) {
 
 		if ( this.isPlaying === true ) {
 
@@ -97,6 +97,13 @@ Audio.prototype = Object.assign( Object.create( Object3D.prototype ), {
 		source.onended = this.onEnded.bind( this );
 		source.playbackRate.setValueAtTime( this.playbackRate, this.startTime );
 		this.startTime = this.context.currentTime;
+
+		if ( sourceCreatedCallback ) {
+
+			sourceCreatedCallback( source );
+
+		}
+
 		source.start( this.startTime, this.offset );
 
 		this.isPlaying = true;
